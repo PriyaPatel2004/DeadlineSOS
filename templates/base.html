@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}DeadlineSOS{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">DS</span><span>Deadline<span class="brand-accent">SOS</span></span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="{{ url_for('dashboard') }}"><span class="nav-icon">◈</span>Dashboard</a>
+        <a class="nav-link sos-link" href="{{ url_for('sos_mode') }}"><span class="nav-icon">!</span><span><strong>SOS Mode</strong><small>What should I do?</small></span></a>
+        <details class="nav-group" open><summary class="nav-link"><span class="nav-icon">▤</span>My Tasks<span class="nav-chevron">›</span></summary><div class="nav-submenu"><a href="{{ url_for('planner') }}">All Tasks</a><a href="{{ url_for('category_page', category='Assignment') }}">Assignments</a><a href="{{ url_for('category_page', category='Homework') }}">Homework</a><a href="{{ url_for('category_page', category='Exam') }}">Exams</a><a href="{{ url_for('category_page', category='Project') }}">Projects</a><a href="{{ url_for('category_page', category='Practical') }}">Practicals</a><a href="{{ url_for('category_page', category='Daily Task') }}">Daily Tasks</a><a href="{{ url_for('category_page', category='Quiz') }}">Quizzes</a></div></details>
+        <a class="nav-link" href="{{ url_for('dashboard') }}#calendar"><span class="nav-icon">▦</span>Calendar</a>
+        <details class="nav-group"><summary class="nav-link"><span class="nav-icon">✦</span>Study<span class="nav-chevron">›</span></summary><div class="nav-submenu"><a href="{{ url_for('study_plan') }}">Smart Study Plan</a><a href="{{ url_for('ai_coach') }}">AI Coach</a><a href="{{ url_for('planner') }}">Subjects</a><a href="{{ url_for('insights') }}#notes">Notes &amp; Resources</a><a href="{{ url_for('category_page', category='Quiz') }}">Quizzes</a><a href="{{ url_for('category_page', category='Academic Event') }}">Academic Events</a></div></details>
+        <a class="nav-link" href="{{ url_for('dashboard') }}#focus"><span class="nav-icon">◷</span>Focus Mode</a>
+        <details class="nav-group"><summary class="nav-link"><span class="nav-icon">◒</span>Progress<span class="nav-chevron">›</span></summary><div class="nav-submenu"><a href="{{ url_for('insights') }}">My Progress</a><a href="{{ url_for('insights') }}#achievements">Study Streak</a><a href="{{ url_for('insights') }}#goals">Goals</a><a href="{{ url_for('insights') }}#achievements">Achievements</a></div></details>
+        <details class="nav-group"><summary class="nav-link"><span class="nav-icon">⋮</span>More<span class="nav-chevron">›</span></summary><div class="nav-submenu"><a href="{{ url_for('category_page', category='Project') }}">Group Projects</a><a href="{{ url_for('category_page', category='Submission') }}">Submissions</a><a href="{{ url_for('insights') }}#announcements">College Announcements</a><a href="{{ url_for('insights') }}#notifications">Notifications</a><a href="{{ url_for('profile') }}">Settings</a></div></details>
+      </nav>
+      <div class="sidebar-note"><span class="pulse-dot"></span><div><strong>Plan with calm</strong><p>Small steps beat deadline panic.</p></div></div>
+      <div class="sidebar-footer">DEADLINESOS <span>v1.0</span></div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar"><div><p class="eyebrow">{{ today|date_label }} · YOUR ACADEMIC HQ</p><h1>Good morning, <em>students.</em></h1></div><div class="account-menu"><button id="reminder-bell" class="reminder-bell" type="button" title="Show reminders">◔<span></span></button><a href="{{ url_for('profile') }}" class="avatar">{{ current_user['name'][0]|upper if current_user else 'A' }}</a><a class="logout-link" href="{{ url_for('logout') }}">Log out</a></div></header>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}{{ category }} · DeadlineSOS{% endblock %}
+{% block content %}
+<section class="category-hero"><div><p class="eyebrow">DEDICATED WORKSPACE</p><h2>{{ category }} <em>desk.</em></h2><p>Keep every {{ category|lower }} in one clear place, with deadlines and reminders close at hand.</p></div><a class="button primary" href="{{ url_for('dashboard') }}#new-task">Add task <span>+</span></a></section>
+<section class="category-grid">{% for task in tasks %}<article class="category-card {% if task.completed %}is-complete{% endif %}"><div class="category-card-top"><span class="tag">{{ task.task_type }}</span><span class="risk-dot {{ task.risk_tone }}"></span></div><h3>{{ task.title }}</h3><p>{{ task.course }} · {{ task.estimated_hours }}h estimated</p><div class="category-card-bottom"><strong>{% if task.days_left < 0 %}Overdue{% elif task.days_left == 0 %}Due today{% else %}{{ task.days_left }} days left{% endif %}</strong><a href="{{ url_for('edit_task', task_id=task.id) }}">Edit ↗</a></div></article>{% else %}<div class="empty-state"><span>✦</span><h3>No {{ category|lower }} yet</h3><p>Add one from the dashboard and it will appear here.</p></div>{% endfor %}</section>
+{% endblock %}
